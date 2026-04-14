@@ -52,7 +52,7 @@ export function PatientsTable() {
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
-              placeholder="Buscar por nombre, DNI o correo..."
+              placeholder="Buscar por nombre, Cédula o correo..."
               className="pl-10"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}

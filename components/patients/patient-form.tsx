@@ -50,7 +50,7 @@ export function PatientForm({ onSuccess }: PatientFormProps) {
       </FieldGroup>
 
       <FieldGroup>
-        <FieldLabel>DNI</FieldLabel>
+        <FieldLabel>Cedula</FieldLabel>
         <Input
           name="dni"
           placeholder="12345678A"
@@ -76,7 +76,7 @@ export function PatientForm({ onSuccess }: PatientFormProps) {
         <FieldLabel>Teléfono</FieldLabel>
         <Input
           name="phone"
-          placeholder="+34 912 34 56 78"
+          placeholder="0424-1234567"
           value={formData.phone}
           onChange={handleChange}
           required
