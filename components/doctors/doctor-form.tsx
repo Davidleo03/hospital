@@ -5,12 +5,14 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Spinner } from '@/components/ui/spinner'
+import { generateId, Doctor } from '@/lib/data-store'
 
 interface DoctorFormProps {
   onSuccess: () => void
+  onAddDoctor: (doctor: Doctor) => void
 }
 
-export function DoctorForm({ onSuccess }: DoctorFormProps) {
+export function DoctorForm({ onSuccess, onAddDoctor }: DoctorFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
@@ -29,10 +31,31 @@ export function DoctorForm({ onSuccess }: DoctorFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    // Simulate API call
+
     await new Promise(resolve => setTimeout(resolve, 500))
+
+    const newDoctor: Doctor = {
+      id: generateId('D'),
+      name: formData.name,
+      license: formData.license,
+      specialty: formData.specialty,
+      availability: formData.availability as Doctor['availability'],
+      status: 'active',
+      email: formData.email,
+      phone: formData.phone
+    }
+
+    onAddDoctor(newDoctor)
     setIsLoading(false)
     onSuccess()
+    setFormData({
+      name: '',
+      license: '',
+      email: '',
+      phone: '',
+      specialty: 'Cardiología',
+      availability: 'available'
+    })
   }
 
   return (
@@ -110,9 +133,9 @@ export function DoctorForm({ onSuccess }: DoctorFormProps) {
           onChange={handleChange}
           className="w-full px-3 py-2 border border-border rounded-lg bg-white text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         >
-          <option value="Disponible">Disponible</option>
-          <option value="Ocupado">Ocupado</option>
-          
+          <option value="available">Disponible</option>
+          <option value="busy">Ocupado</option>
+          <option value="off">Fuera</option>
         </select>
       </FieldGroup>
 

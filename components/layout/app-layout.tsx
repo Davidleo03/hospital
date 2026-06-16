@@ -1,9 +1,17 @@
 'use client'
 
+import { usePathname } from 'next/navigation'
 import { Sidebar } from './sidebar'
 import { Header } from './header'
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname()
+  const isLoginRoute = pathname === '/login'
+
+  if (isLoginRoute) {
+    return <>{children}</>
+  }
+
   return (
     <div className="flex h-screen bg-background">
       {/* Sidebar */}

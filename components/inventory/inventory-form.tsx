@@ -5,12 +5,14 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Spinner } from '@/components/ui/spinner'
+import { generateId, Medication } from '@/lib/data-store'
 
 interface InventoryFormProps {
   onSuccess: () => void
+  onAddMedication: (medication: Medication) => void
 }
 
-export function InventoryForm({ onSuccess }: InventoryFormProps) {
+export function InventoryForm({ onSuccess, onAddMedication }: InventoryFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
@@ -29,10 +31,30 @@ export function InventoryForm({ onSuccess }: InventoryFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    // Simulate API call
+
     await new Promise(resolve => setTimeout(resolve, 500))
+
+    const newMedication: Medication = {
+      id: generateId('MED'),
+      name: formData.name,
+      dosage: formData.dosage,
+      quantity: Number(formData.quantity),
+      expiryDate: formData.expiryDate,
+      supplier: formData.supplier,
+      alertLevel: Number(formData.alertLevel)
+    }
+
+    onAddMedication(newMedication)
     setIsLoading(false)
     onSuccess()
+    setFormData({
+      name: '',
+      dosage: '',
+      quantity: '',
+      expiryDate: '',
+      supplier: '',
+      alertLevel: ''
+    })
   }
 
   return (
@@ -98,7 +120,6 @@ export function InventoryForm({ onSuccess }: InventoryFormProps) {
         <Input
           name="alertLevel"
           type="number"
-    
           value={formData.alertLevel}
           onChange={handleChange}
           required

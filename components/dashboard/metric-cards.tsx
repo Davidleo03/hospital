@@ -53,7 +53,7 @@ export function MetricCards() {
       />
       <MetricCard
         label="Ingresos Mensuales"
-        value="€45,230"
+        value="$5000"
         change="8% desde el mes pasado"
         icon={<DollarSign className="w-6 h-6" />}
         trend="up"

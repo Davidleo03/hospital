@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import {
   LayoutDashboard,
   Users,
@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { useAuth } from '@/hooks/use-auth'
 
 const navItems = [
   { href: '/', label: 'Panel de Control', icon: LayoutDashboard },
@@ -27,7 +28,14 @@ const navItems = [
 
 export function Sidebar() {
   const pathname = usePathname()
+  const router = useRouter()
+  const { logout } = useAuth()
   const [isOpen, setIsOpen] = useState(true)
+
+  const handleLogout = () => {
+    logout()
+    router.replace('/login')
+  }
 
   return (
     <>
@@ -87,6 +95,7 @@ export function Sidebar() {
           <Button
             variant="ghost"
             className="w-full justify-start text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+            onClick={handleLogout}
           >
             <LogOut className="w-4 h-4 mr-2" />
             <span className="text-sm">Cerrar Sesión</span>

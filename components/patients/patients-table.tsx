@@ -20,14 +20,19 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Search, MoreVertical, Edit, Trash2, Eye } from 'lucide-react'
-import { mockPatients, Patient } from '@/lib/mock-data'
+import { Patient } from '@/lib/data-store'
 
 const specialties = ['Todas', 'Cardiología', 'Dermatología', 'Traumatología', 'Oftalmología', 'Neurología', 'Neumología', 'Endocrinología', 'Gastroenterología', 'Reumatología']
 
-export function PatientsTable() {
+interface PatientsTableProps {
+  patients: Patient[]
+  onDeletePatient: (id: string) => void
+  onEditPatient: (patient: Patient) => void
+}
+
+export function PatientsTable({ patients, onDeletePatient, onEditPatient }: PatientsTableProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedSpecialty, setSelectedSpecialty] = useState('Todas')
-  const [patients, setPatients] = useState<Patient[]>(mockPatients)
 
   const filteredPatients = useMemo(() => {
     return patients.filter((patient) => {
@@ -39,10 +44,6 @@ export function PatientsTable() {
       return matchesSearch && matchesSpecialty
     })
   }, [searchTerm, selectedSpecialty, patients])
-
-  const handleDeletePatient = (id: string) => {
-    setPatients(patients.filter(p => p.id !== id))
-  }
 
   return (
     <Card className="bg-white border-border">
@@ -127,13 +128,16 @@ export function PatientsTable() {
                           <Eye className="w-4 h-4" />
                           Ver
                         </DropdownMenuItem>
-                        <DropdownMenuItem className="gap-2 cursor-pointer">
+                        <DropdownMenuItem
+                          className="gap-2 cursor-pointer"
+                          onClick={() => onEditPatient(patient)}
+                        >
                           <Edit className="w-4 h-4" />
                           Editar
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="gap-2 cursor-pointer text-red-600"
-                          onClick={() => handleDeletePatient(patient.id)}
+                          onClick={() => onDeletePatient(patient.id)}
                         >
                           <Trash2 className="w-4 h-4" />
                           Eliminar

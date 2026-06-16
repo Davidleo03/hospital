@@ -5,17 +5,20 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Spinner } from '@/components/ui/spinner'
-import { mockPatients, mockDoctors } from '@/lib/mock-data'
+import { generateId, Appointment, Patient, Doctor } from '@/lib/data-store'
 
 interface AppointmentFormProps {
   onSuccess: () => void
+  onAddAppointment: (appointment: Appointment) => void
+  patients: Patient[]
+  doctors: Doctor[]
 }
 
-export function AppointmentForm({ onSuccess }: AppointmentFormProps) {
+export function AppointmentForm({ onSuccess, onAddAppointment, patients, doctors }: AppointmentFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
-    patientId: mockPatients[0].id,
-    doctorId: mockDoctors[0].id,
+    patientId: patients.length > 0 ? patients[0].id : '',
+    doctorId: doctors.length > 0 ? doctors[0].id : '',
     date: '',
     time: '10:00',
     reason: ''
@@ -29,10 +32,28 @@ export function AppointmentForm({ onSuccess }: AppointmentFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 500))
+
+    const newAppointment: Appointment = {
+      id: generateId('APT'),
+      patientId: formData.patientId,
+      doctorId: formData.doctorId,
+      date: formData.date,
+      time: formData.time,
+      reason: formData.reason,
+      status: 'scheduled'
+    }
+
+    onAddAppointment(newAppointment)
     setIsLoading(false)
     onSuccess()
+    setFormData({
+      patientId: patients.length > 0 ? patients[0].id : '',
+      doctorId: doctors.length > 0 ? doctors[0].id : '',
+      date: '',
+      time: '10:00',
+      reason: ''
+    })
   }
 
   return (
@@ -45,7 +66,7 @@ export function AppointmentForm({ onSuccess }: AppointmentFormProps) {
           onChange={handleChange}
           className="w-full px-3 py-2 border border-border rounded-lg bg-white text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         >
-          {mockPatients.map(patient => (
+          {patients.map(patient => (
             <option key={patient.id} value={patient.id}>
               {patient.name}
             </option>
@@ -61,7 +82,7 @@ export function AppointmentForm({ onSuccess }: AppointmentFormProps) {
           onChange={handleChange}
           className="w-full px-3 py-2 border border-border rounded-lg bg-white text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary"
         >
-          {mockDoctors.map(doctor => (
+          {doctors.map(doctor => (
             <option key={doctor.id} value={doctor.id}>
               {doctor.name} - {doctor.specialty}
             </option>

@@ -2,23 +2,29 @@
 
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { mockAppointments, mockPatients, mockDoctors } from '@/lib/mock-data'
+import { Appointment, Patient, Doctor } from '@/lib/data-store'
 
-export function AppointmentsList() {
-  const upcomingAppointments = mockAppointments
+interface AppointmentsListProps {
+  appointments: Appointment[]
+  patients: Patient[]
+  doctors: Doctor[]
+}
+
+export function AppointmentsList({ appointments, patients, doctors }: AppointmentsListProps) {
+  const upcomingAppointments = appointments
     .filter(apt => new Date(apt.date) >= new Date() && apt.status === 'scheduled')
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
     .slice(0, 10)
 
   const getPatientName = (patientId: string) => {
-    return mockPatients.find(p => p.id === patientId)?.name || 'Desconocido'
+    return patients.find(p => p.id === patientId)?.name || 'Desconocido'
   }
 
   const getDoctorName = (doctorId: string) => {
-    return mockDoctors.find(d => d.id === doctorId)?.name || 'Desconocido'
+    return doctors.find(d => d.id === doctorId)?.name || 'Desconocido'
   }
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: Appointment['status']) => {
     switch (status) {
       case 'scheduled':
         return 'bg-blue-100 text-blue-800'
@@ -31,7 +37,7 @@ export function AppointmentsList() {
     }
   }
 
-  const getStatusLabel = (status: string) => {
+  const getStatusLabel = (status: Appointment['status']) => {
     switch (status) {
       case 'scheduled':
         return 'Programada'

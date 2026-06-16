@@ -20,13 +20,14 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Search, MoreVertical, Edit, Trash2, AlertTriangle, Plus } from 'lucide-react'
-import { mockMedications, Medication } from '@/lib/mock-data'
+import { useLocalStorage } from '@/hooks/use-local-storage'
+import { STORAGE_KEYS, initialMedications, Medication } from '@/lib/data-store'
 import { InventoryDialog } from '@/components/inventory/inventory-dialog'
 
 export default function InventoryPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [medications, setMedications] = useState<Medication[]>(mockMedications)
+  const [medications, setMedications] = useLocalStorage<Medication[]>(STORAGE_KEYS.medications, initialMedications)
 
   const filteredMedications = useMemo(() => {
     return medications.filter((med) => {
@@ -39,7 +40,11 @@ export default function InventoryPage() {
   }, [searchTerm, medications])
 
   const handleDeleteMedication = (id: string) => {
-    setMedications(medications.filter(m => m.id !== id))
+    setMedications(prev => prev.filter(m => m.id !== id))
+  }
+
+  const handleAddMedication = (medication: Medication) => {
+    setMedications(prev => [...prev, medication])
   }
 
   const isLowStock = (medication: Medication) => {
@@ -163,7 +168,11 @@ export default function InventoryPage() {
       </Card>
 
       {/* Inventory Dialog */}
-      <InventoryDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
+      <InventoryDialog
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        onAddMedication={handleAddMedication}
+      />
     </div>
   )
 }

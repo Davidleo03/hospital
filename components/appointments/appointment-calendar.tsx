@@ -4,20 +4,24 @@ import { useState } from 'react'
 import { Calendar } from '@/components/ui/calendar'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { mockAppointments } from '@/lib/mock-data'
+import { Appointment } from '@/lib/data-store'
 
-export function AppointmentCalendar() {
+interface AppointmentCalendarProps {
+  appointments: Appointment[]
+}
+
+export function AppointmentCalendar({ appointments }: AppointmentCalendarProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
 
   const appointmentsOnDate = selectedDate
-    ? mockAppointments.filter(
+    ? appointments.filter(
         apt =>
           new Date(apt.date).toDateString() ===
           selectedDate.toDateString()
       )
     : []
 
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: Appointment['status']) => {
     switch (status) {
       case 'scheduled':
         return 'bg-blue-100 text-blue-800'
@@ -30,7 +34,7 @@ export function AppointmentCalendar() {
     }
   }
 
-  const getStatusLabel = (status: string) => {
+  const getStatusLabel = (status: Appointment['status']) => {
     switch (status) {
       case 'scheduled':
         return 'Programada'

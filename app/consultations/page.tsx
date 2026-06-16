@@ -1,16 +1,18 @@
 'use client'
 
+import { useData } from '@/hooks/use-data'
 import { Card } from '@/components/ui/card'
-import { mockConsultations, mockPatients, mockDoctors } from '@/lib/mock-data'
 import { Badge } from '@/components/ui/badge'
 
 export default function ConsultationsPage() {
+  const { consultations, patients, doctors } = useData()
+
   const getPatientName = (patientId: string) => {
-    return mockPatients.find(p => p.id === patientId)?.name || 'Desconocido'
+    return patients.find(p => p.id === patientId)?.name || 'Desconocido'
   }
 
   const getDoctorName = (doctorId: string) => {
-    return mockDoctors.find(d => d.id === doctorId)?.name || 'Desconocido'
+    return doctors.find(d => d.id === doctorId)?.name || 'Desconocido'
   }
 
   return (
@@ -25,12 +27,12 @@ export default function ConsultationsPage() {
 
       {/* Consultations List */}
       <div className="grid gap-4 sm:gap-6">
-        {mockConsultations.length === 0 ? (
+        {consultations.length === 0 ? (
           <Card className="p-8 bg-white border-border text-center">
             <p className="text-muted-foreground">No se encontraron consultas</p>
           </Card>
         ) : (
-          mockConsultations.map((consultation) => (
+          consultations.map((consultation) => (
             <Card key={consultation.id} className="p-6 bg-white border-border">
               <div className="flex items-start justify-between mb-4">
                 <div>

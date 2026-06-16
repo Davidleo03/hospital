@@ -1,16 +1,25 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Spinner } from '@/components/ui/spinner'
+import { generateId, Patient } from '@/lib/data-store'
 
 interface PatientFormProps {
   onSuccess: () => void
+  onAddPatient: (patient: Patient) => void
+  onUpdatePatient?: (patient: Patient) => void
+  initialPatient?: Patient | null
 }
 
-export function PatientForm({ onSuccess }: PatientFormProps) {
+export function PatientForm({
+  onSuccess,
+  onAddPatient,
+  onUpdatePatient,
+  initialPatient = null,
+}: PatientFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
@@ -22,6 +31,30 @@ export function PatientForm({ onSuccess }: PatientFormProps) {
     address: ''
   })
 
+  useEffect(() => {
+    if (initialPatient) {
+      setFormData({
+        name: initialPatient.name,
+        dni: initialPatient.dni,
+        email: initialPatient.email,
+        phone: initialPatient.phone,
+        specialty: initialPatient.specialty,
+        dateOfBirth: initialPatient.dateOfBirth,
+        address: initialPatient.address,
+      })
+    } else {
+      setFormData({
+        name: '',
+        dni: '',
+        email: '',
+        phone: '',
+        specialty: 'Cardiología',
+        dateOfBirth: '',
+        address: ''
+      })
+    }
+  }, [initialPatient])
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
@@ -30,8 +63,28 @@ export function PatientForm({ onSuccess }: PatientFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    // Simulate API call
+
     await new Promise(resolve => setTimeout(resolve, 500))
+
+    const patient: Patient = {
+      id: initialPatient?.id ?? generateId('P'),
+      name: formData.name,
+      dni: formData.dni,
+      email: formData.email,
+      phone: formData.phone,
+      specialty: formData.specialty,
+      status: initialPatient?.status ?? 'active',
+      dateOfBirth: formData.dateOfBirth,
+      address: formData.address,
+      medicalHistory: initialPatient?.medicalHistory ?? []
+    }
+
+    if (initialPatient && onUpdatePatient) {
+      onUpdatePatient(patient)
+    } else {
+      onAddPatient(patient)
+    }
+
     setIsLoading(false)
     onSuccess()
   }
@@ -132,7 +185,13 @@ export function PatientForm({ onSuccess }: PatientFormProps) {
           disabled={isLoading}
         >
           {isLoading ? <Spinner className="mr-2" /> : null}
-          {isLoading ? 'Agregando...' : 'Agregar Paciente'}
+          {isLoading
+            ? initialPatient
+              ? 'Guardando...'
+              : 'Agregando...'
+            : initialPatient
+              ? 'Guardar Cambios'
+              : 'Agregar Paciente'}
         </Button>
       </div>
     </form>

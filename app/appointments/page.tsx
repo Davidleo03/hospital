@@ -1,14 +1,20 @@
 'use client'
 
+import { useState } from 'react'
+import { useData } from '@/hooks/use-data'
 import { AppointmentCalendar } from '@/components/appointments/appointment-calendar'
 import { AppointmentsList } from '@/components/appointments/appointments-list'
 import { AppointmentDialog } from '@/components/appointments/appointment-dialog'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
-import { useState } from 'react'
 
 export default function AppointmentsPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const { appointments, patients, doctors, addAppointment } = useData()
+
+  const handleAddAppointment = (appointment: any) => {
+    addAppointment(appointment)
+  }
 
   return (
     <div className="space-y-6">
@@ -32,13 +38,19 @@ export default function AppointmentsPage() {
       {/* Calendar and List */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         <div className="lg:col-span-2">
-          <AppointmentCalendar />
+          <AppointmentCalendar appointments={appointments} />
         </div>
-        <AppointmentsList />
+        <AppointmentsList appointments={appointments} patients={patients} doctors={doctors} />
       </div>
 
       {/* Appointment Dialog */}
-      <AppointmentDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
+      <AppointmentDialog
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        patients={patients}
+        doctors={doctors}
+        onAddAppointment={handleAddAppointment}
+      />
     </div>
   )
 }

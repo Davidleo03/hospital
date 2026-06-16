@@ -20,14 +20,18 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Search, MoreVertical, Edit, Trash2, Eye } from 'lucide-react'
-import { mockDoctors, Doctor } from '@/lib/mock-data'
+import { Doctor } from '@/lib/data-store'
 
 const specialties = ['Todas', 'Cardiología', 'Dermatología', 'Traumatología', 'Oftalmología', 'Neurología', 'Neumología']
 
-export function DoctorsTable() {
+interface DoctorsTableProps {
+  doctors: Doctor[]
+  onDeleteDoctor: (id: string) => void
+}
+
+export function DoctorsTable({ doctors, onDeleteDoctor }: DoctorsTableProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedSpecialty, setSelectedSpecialty] = useState('Todas')
-  const [doctors, setDoctors] = useState<Doctor[]>(mockDoctors)
 
   const filteredDoctors = useMemo(() => {
     return doctors.filter((doctor) => {
@@ -40,11 +44,7 @@ export function DoctorsTable() {
     })
   }, [searchTerm, selectedSpecialty, doctors])
 
-  const handleDeleteDoctor = (id: string) => {
-    setDoctors(doctors.filter(d => d.id !== id))
-  }
-
-  const getAvailabilityColor = (availability: string) => {
+  const getAvailabilityColor = (availability: Doctor['availability']) => {
     switch (availability) {
       case 'available':
         return 'bg-green-100 text-green-800'
@@ -57,7 +57,7 @@ export function DoctorsTable() {
     }
   }
 
-  const getAvailabilityLabel = (availability: string) => {
+  const getAvailabilityLabel = (availability: Doctor['availability']) => {
     switch (availability) {
       case 'available':
         return 'Disponible'
@@ -166,7 +166,7 @@ export function DoctorsTable() {
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="gap-2 cursor-pointer text-red-600"
-                          onClick={() => handleDeleteDoctor(doctor.id)}
+                          onClick={() => onDeleteDoctor(doctor.id)}
                         >
                           <Trash2 className="w-4 h-4" />
                           Eliminar

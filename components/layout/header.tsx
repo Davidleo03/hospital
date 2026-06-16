@@ -8,8 +8,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
+import { useRouter } from 'next/navigation'
+import { useAuth } from '@/hooks/use-auth'
 
 export function Header() {
+  const router = useRouter()
+  const { logout } = useAuth()
+
+  const handleLogout = () => {
+    logout()
+    router.replace('/login')
+  }
+
   return (
     <header className="fixed top-0 right-0 left-0 lg:left-64 h-16 bg-white border-b border-border flex items-center justify-between px-4 sm:px-6 z-30">
       <div className="text-sm text-muted-foreground hidden sm:block">
@@ -40,7 +50,7 @@ export function Header() {
           <DropdownMenuContent align="end">
             <DropdownMenuItem>Perfil</DropdownMenuItem>
             <DropdownMenuItem>Configuración</DropdownMenuItem>
-            <DropdownMenuItem>Cerrar Sesión</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>Cerrar Sesión</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

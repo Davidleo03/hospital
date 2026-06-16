@@ -2,6 +2,9 @@ import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { AppLayout } from '@/components/layout/app-layout'
+import { AuthProvider } from '@/hooks/use-auth'
+import { AuthGuard } from '@/components/auth/auth-guard'
+import { DataProvider } from '@/hooks/use-data'
 import './globals.css'
 
 const geist = Geist({ subsets: ["latin"], variable: '--font-sans' })
@@ -44,9 +47,15 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${geist.variable} ${geistMono.variable}`}>
+    <html lang="es" className={`${geist.variable} ${geistMono.variable}`}>
       <body className="font-sans antialiased">
-        <AppLayout>{children}</AppLayout>
+        <AuthProvider>
+          <AuthGuard>
+            <DataProvider>
+              <AppLayout>{children}</AppLayout>
+            </DataProvider>
+          </AuthGuard>
+        </AuthProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
