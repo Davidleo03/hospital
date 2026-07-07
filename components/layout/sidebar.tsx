@@ -60,7 +60,7 @@ export function Sidebar() {
         {/* Logo/Clinic Name */}
         <div className="p-6 border-b border-sidebar-border">
           <h1 className="text-xl font-bold text-sidebar-foreground">
-            MediClinic Pro
+            MediCarmen
           </h1>
           <p className="text-xs text-sidebar-foreground/60 mt-1">
             Gestión Clínica

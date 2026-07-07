@@ -11,8 +11,8 @@ const geist = Geist({ subsets: ["latin"], variable: '--font-sans' })
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: '--font-mono' })
 
 export const metadata: Metadata = {
-  title: 'MediClinic Pro - Clinic Management',
-  description: 'Professional clinic management system for healthcare providers',
+  title: 'MediCarmen - Gestión de Clínicas',
+  description: 'Sistema de gestión de clínicas y hospitales. Administra pacientes, citas, personal y más.',
   generator: 'v0.app',
   icons: {
     icon: [

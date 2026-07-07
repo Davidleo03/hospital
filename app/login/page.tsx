@@ -73,7 +73,7 @@ export default function LoginPage() {
             <div className="hidden lg:flex flex-col justify-between space-y-6 bg-slate-900/80 p-10 text-white lg:p-12">
               <div>
                 <p className="text-xs uppercase tracking-[0.4em] text-sky-300/80">
-                  Bienvenido a MediClinic
+                  Bienvenido a MediCarmen
                 </p>
                 <h1 className="mt-4 text-3xl font-semibold leading-tight sm:text-4xl">
                   Control total de tu clínica
