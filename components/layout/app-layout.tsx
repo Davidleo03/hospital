@@ -23,7 +23,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         <Header />
 
         {/* Page content */}
-        <main className="flex-1 overflow-auto pt-16 bg-white">
+        <main className="flex-1 overflow-auto pt-16 bg-secondary">
           <div className="max-w-7xl mx-auto p-4 sm:p-6">{children}</div>
         </main>
       </div>

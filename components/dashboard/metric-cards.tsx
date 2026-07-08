@@ -1,5 +1,7 @@
 'use client'
 
+import { useMemo } from 'react'
+import { useData } from '@/hooks/use-data'
 import { Card } from '@/components/ui/card'
 import { Users, Activity, DollarSign, Calendar } from 'lucide-react'
 
@@ -26,7 +28,7 @@ function MetricCard({ label, value, change, icon, trend }: MetricCardProps) {
             {trend === 'up' ? '↑' : '↓'} {change}
           </p>
         </div>
-        <div className="p-3 bg-primary/10 rounded-lg text-primary">
+        <div className="p-3 bg-accent/10 rounded-lg text-accent">
           {icon}
         </div>
       </div>
@@ -35,36 +37,59 @@ function MetricCard({ label, value, change, icon, trend }: MetricCardProps) {
 }
 
 export function MetricCards() {
+  const { patients, appointments, consultations, medications } = useData()
+
+  const metrics = useMemo(() => {
+    const scheduledAppointments = appointments.filter((appointment) => appointment.status === 'scheduled').length
+    const completedAppointments = appointments.filter((appointment) => appointment.status === 'completed').length
+    const activePatients = patients.filter((patient) => patient.status === 'active').length
+    const lowStockMedications = medications.filter((medication) => medication.quantity < medication.alertLevel).length
+    const monthlyRevenue = completedAppointments * 180
+
+    return [
+      {
+        label: 'Total de Pacientes',
+        value: patients.length,
+        change: `${activePatients} activos`,
+        icon: <Users className="w-6 h-6" />,
+        trend: 'up' as const
+      },
+      {
+        label: 'Consultas Activas',
+        value: consultations.length,
+        change: `${scheduledAppointments} citas pendientes`,
+        icon: <Activity className="w-6 h-6" />,
+        trend: 'up' as const
+      },
+      {
+        label: 'Ingresos Mensuales',
+        value: `$${monthlyRevenue.toLocaleString('es-ES')}`,
+        change: `${completedAppointments} completadas`,
+        icon: <DollarSign className="w-6 h-6" />,
+        trend: 'up' as const
+      },
+      {
+        label: 'Citas Programadas',
+        value: scheduledAppointments,
+        change: `${lowStockMedications} meds. en alerta`,
+        icon: <Calendar className="w-6 h-6" />,
+        trend: 'up' as const
+      }
+    ]
+  }, [appointments, consultations.length, medications, patients])
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-      <MetricCard
-        label="Total de Pacientes"
-        value={154}
-        change="12% desde el mes pasado"
-        icon={<Users className="w-6 h-6" />}
-        trend="up"
-      />
-      <MetricCard
-        label="Consultas Activas"
-        value={23}
-        change="5% desde la semana pasada"
-        icon={<Activity className="w-6 h-6" />}
-        trend="up"
-      />
-      <MetricCard
-        label="Ingresos Mensuales"
-        value="$5000"
-        change="8% desde el mes pasado"
-        icon={<DollarSign className="w-6 h-6" />}
-        trend="up"
-      />
-      <MetricCard
-        label="Citas Programadas"
-        value={47}
-        change="3% desde la semana pasada"
-        icon={<Calendar className="w-6 h-6" />}
-        trend="down"
-      />
+      {metrics.map((metric) => (
+        <MetricCard
+          key={metric.label}
+          label={metric.label}
+          value={metric.value}
+          change={metric.change}
+          icon={metric.icon}
+          trend={metric.trend}
+        />
+      ))}
     </div>
   )
 }

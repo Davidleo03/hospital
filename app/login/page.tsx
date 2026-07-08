@@ -61,7 +61,7 @@ export default function LoginPage() {
       className="min-h-screen relative overflow-hidden bg-slate-950 text-white"
       style={{
         backgroundImage:
-          "linear-gradient(rgba(2, 24, 45, 0.8), rgba(7, 46, 74, 0.9)), url('/hospital.png')",
+          "linear-gradient(rgba(2, 24, 45, 0.8), rgba(7, 46, 74, 0.9)), url('/medicarmen-logo.jpeg')",
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
@@ -84,20 +84,17 @@ export default function LoginPage() {
               </div>
 
               
+
+              
             </div>
 
             <div className="bg-white px-5 py-8 sm:px-8 sm:py-10 lg:p-12">
-              <div className="mb-6 text-center">
-                <p className="text-sm uppercase tracking-[0.24em] text-slate-500">
-                  Acceso seguro
-                </p>
-                <h2 className="mt-4 text-3xl font-semibold text-slate-950">
-                  Iniciar sesión
-                </h2>
-                <p className="mt-2 text-sm text-slate-500">
-                  Ingresa con tu usuario y contraseña para continuar.
-                </p>
-               
+              <div className="mb-6 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
+                <img
+                  src="/flayer.jpeg"
+                  alt="Flayer"
+                  className="h-40 w-full object-cover"
+                />
               </div>
 
               <Form {...form}>

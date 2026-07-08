@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import {
   LayoutDashboard,
@@ -8,8 +9,8 @@ import {
   Stethoscope,
   Calendar,
   FileText,
-  Pill,
-  LogOut,
+  Pill,  User,
+  Settings,  LogOut,
   Menu,
   X
 } from 'lucide-react'
@@ -23,7 +24,9 @@ const navItems = [
   { href: '/doctors', label: 'Médicos', icon: Stethoscope },
   { href: '/appointments', label: 'Citas', icon: Calendar },
   { href: '/consultations', label: 'Consultas', icon: FileText },
-  { href: '/inventory', label: 'Inventario', icon: Pill }
+  { href: '/inventory', label: 'Inventario', icon: Pill },
+  { href: '/profile', label: 'Perfil', icon: User },
+  { href: '/settings', label: 'Configuración', icon: Settings }
 ]
 
 export function Sidebar() {
@@ -58,13 +61,17 @@ export function Sidebar() {
         } lg:translate-x-0`}
       >
         {/* Logo/Clinic Name */}
-        <div className="p-6 border-b border-sidebar-border">
-          <h1 className="text-xl font-bold text-sidebar-foreground">
-            MediCarmen
-          </h1>
-          <p className="text-xs text-sidebar-foreground/60 mt-1">
-            Gestión Clínica
-          </p>
+        <div className="p-4 sm:p-6 border-b border-sidebar-border">
+          <div className="flex items-center justify-center rounded-xl bg-accent/10 p-3 shadow-sm ring-1 ring-accent/20">
+            <Image
+              src="/medicarmen-logo.jpeg"
+              alt="MediCarmen"
+              width={180}
+              height={72}
+              priority
+              className="h-12 w-auto w-full object-contain sm:h-14 rounded-sm"
+            />
+          </div>
         </div>
 
         {/* Navigation */}

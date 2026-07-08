@@ -1,23 +1,23 @@
 'use client'
 
 import { useState } from 'react'
-import { useLocalStorage } from '@/hooks/use-local-storage'
+import { useData } from '@/hooks/use-data'
 import { DoctorsTable } from '@/components/doctors/doctors-table'
 import { DoctorDialog } from '@/components/doctors/doctor-dialog'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
-import { STORAGE_KEYS, initialDoctors, Doctor } from '@/lib/data-store'
+import { Doctor } from '@/lib/data-store'
 
 export default function DoctorsPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const [doctors, setDoctors] = useLocalStorage<Doctor[]>(STORAGE_KEYS.doctors, initialDoctors)
+  const { doctors, addDoctor, deleteDoctor } = useData()
 
   const handleAddDoctor = (doctor: Doctor) => {
-    setDoctors(prev => [...prev, doctor])
+    addDoctor(doctor)
   }
 
   const handleDeleteDoctor = (id: string) => {
-    setDoctors(prev => prev.filter(doctor => doctor.id !== id))
+    deleteDoctor(id)
   }
 
   return (

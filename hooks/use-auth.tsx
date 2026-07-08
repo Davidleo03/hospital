@@ -12,12 +12,13 @@ type AuthContextValue = {
   isAuthenticated: boolean
   login: (email: string, password: string) => boolean
   logout: () => void
+  updateUser: (user: User) => void
 }
 
 const AuthContext = React.createContext<AuthContextValue | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [users] = useLocalStorage<User[]>(AUTH_STORAGE_KEYS.users, initialUsers)
+  const [users, setUsers] = useLocalStorage<User[]>(AUTH_STORAGE_KEYS.users, initialUsers)
   const [currentUser, setCurrentUser] = useLocalStorage<User | null>(AUTH_STORAGE_KEYS.currentUser, null)
   const [ready, setReady] = useState(false)
 
@@ -45,6 +46,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setCurrentUser(null)
   }
 
+  const updateUser = React.useCallback(
+    (user: User) => {
+      setCurrentUser(user)
+      setUsers((prev) => prev.map((existingUser) => (existingUser.id === user.id ? user : existingUser)))
+    },
+    [setCurrentUser, setUsers],
+  )
+
   const value = useMemo(
     () => ({
       ready,
@@ -52,9 +61,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       currentUser,
       isAuthenticated: ready && currentUser !== null,
       login,
-      logout
+      logout,
+      updateUser
     }),
-    [ready, users, currentUser],
+    [ready, users, currentUser, login, logout, updateUser],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

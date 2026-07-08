@@ -1,8 +1,10 @@
 'use client'
 
+import { useMemo } from 'react'
+import { useData } from '@/hooks/use-data'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { CheckCircle2, AlertCircle, FileText, Calendar, Plus } from 'lucide-react'
+import { CheckCircle2, AlertCircle, FileText, Calendar } from 'lucide-react'
 
 interface Activity {
   id: string
@@ -13,50 +15,72 @@ interface Activity {
   icon: React.ReactNode
 }
 
-const activities: Activity[] = [
-  {
-    id: '1',
-    type: 'appointment',
-    title: 'Nueva Cita Programada',
-    description: 'Dr. Ruiz tiene una consulta con Juan García a las 10:30 AM',
-    timestamp: 'Hace 30 minutos',
-    icon: <Calendar className="w-4 h-4" />
-  },
-  {
-    id: '2',
-    type: 'consultation',
-    title: 'Consulta Completada',
-    description: 'Elena García completó consulta con María Rodríguez',
-    timestamp: 'Hace 2 horas',
-    icon: <CheckCircle2 className="w-4 h-4" />
-  },
-  {
-    id: '3',
-    type: 'alert',
-    title: 'Alerta de Bajo Stock',
-    description: 'Stock de Ibuprofeno 400mg por debajo del nivel de alerta (25 unidades)',
-    timestamp: 'Hace 4 horas',
-    icon: <AlertCircle className="w-4 h-4" />
-  },
-  {
-    id: '4',
-    type: 'record',
-    title: 'Registro Médico Actualizado',
-    description: 'Paciente P005 - Nuevo diagnóstico registrado en el sistema',
-    timestamp: 'Hace 1 día',
-    icon: <FileText className="w-4 h-4" />
-  },
-  {
-    id: '5',
-    type: 'appointment',
-    title: 'Cita Cancelada',
-    description: 'Paciente P010 canceló cita con la Dra. López',
-    timestamp: 'Hace 2 días',
-    icon: <Calendar className="w-4 h-4" />
-  }
-]
-
 export function ActivityFeed() {
+  const { appointments, consultations, medications, patients, doctors } = useData()
+
+  const activities = useMemo<Activity[]>(() => {
+    const items: Activity[] = []
+
+    appointments.slice(0, 3).forEach((appointment) => {
+      const patient = patients.find((item) => item.id === appointment.patientId)
+      const doctor = doctors.find((item) => item.id === appointment.doctorId)
+      const isCancelled = appointment.status === 'cancelled'
+
+      items.push({
+        id: `appointment-${appointment.id}`,
+        type: 'appointment',
+        title: isCancelled ? 'Cita cancelada' : 'Nueva cita programada',
+        description: `${patient?.name ?? 'Paciente'} con ${doctor?.name ?? 'médico'} el ${new Date(appointment.date).toLocaleDateString('es-ES')} a las ${appointment.time}`,
+        timestamp: appointment.status === 'completed' ? 'Completada' : 'Registrada en el sistema',
+        icon: <Calendar className="w-4 h-4" />
+      })
+    })
+
+    consultations.slice(0, 2).forEach((consultation) => {
+      const patient = patients.find((item) => item.id === consultation.patientId)
+      const doctor = doctors.find((item) => item.id === consultation.doctorId)
+
+      items.push({
+        id: `consultation-${consultation.id}`,
+        type: 'consultation',
+        title: 'Consulta registrada',
+        description: `${patient?.name ?? 'Paciente'} atendido por ${doctor?.name ?? 'médico'}: ${consultation.diagnosis}`,
+        timestamp: new Date(consultation.date).toLocaleDateString('es-ES'),
+        icon: <CheckCircle2 className="w-4 h-4" />
+      })
+    })
+
+    medications
+      .filter((medication) => medication.quantity < medication.alertLevel)
+      .slice(0, 1)
+      .forEach((medication) => {
+        items.push({
+          id: `alert-${medication.id}`,
+          type: 'alert',
+          title: 'Alerta de bajo stock',
+          description: `${medication.name} ${medication.dosage} está por debajo del umbral (${medication.quantity} unidades)`,
+          timestamp: 'Requiere reposición',
+          icon: <AlertCircle className="w-4 h-4" />
+        })
+      })
+
+    if (consultations.length > 0) {
+      const latestConsultation = consultations[consultations.length - 1]
+      const patient = patients.find((item) => item.id === latestConsultation.patientId)
+
+      items.push({
+        id: `record-${latestConsultation.id}`,
+        type: 'record',
+        title: 'Registro médico actualizado',
+        description: `${patient?.name ?? 'Paciente'} - ${latestConsultation.notes || 'Nuevo diagnóstico registrado'}`,
+        timestamp: new Date(latestConsultation.date).toLocaleDateString('es-ES'),
+        icon: <FileText className="w-4 h-4" />
+      })
+    }
+
+    return items.slice(0, 5)
+  }, [appointments, consultations, doctors, medications, patients])
+
   const getActivityColor = (type: Activity['type']) => {
     switch (type) {
       case 'appointment':
