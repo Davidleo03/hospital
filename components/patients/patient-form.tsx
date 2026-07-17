@@ -28,7 +28,8 @@ export function PatientForm({
     phone: '',
     specialty: 'Cardiología',
     dateOfBirth: '',
-    address: ''
+    address: '',
+    medicalHistory: ''
   })
 
   useEffect(() => {
@@ -41,6 +42,7 @@ export function PatientForm({
         specialty: initialPatient.specialty,
         dateOfBirth: initialPatient.dateOfBirth,
         address: initialPatient.address,
+        medicalHistory: initialPatient.medicalHistory.join(', ')
       })
     } else {
       setFormData({
@@ -50,12 +52,13 @@ export function PatientForm({
         phone: '',
         specialty: 'Cardiología',
         dateOfBirth: '',
-        address: ''
+        address: '',
+        medicalHistory: ''
       })
     }
   }, [initialPatient])
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
   }
@@ -76,7 +79,10 @@ export function PatientForm({
       status: initialPatient?.status ?? 'active',
       dateOfBirth: formData.dateOfBirth,
       address: formData.address,
-      medicalHistory: initialPatient?.medicalHistory ?? []
+      medicalHistory: formData.medicalHistory
+        .split(',')
+        .map((item) => item.trim())
+        .filter(Boolean)
     }
 
     if (initialPatient && onUpdatePatient) {
@@ -130,6 +136,8 @@ export function PatientForm({
         <Input
           name="phone"
           placeholder="0424-1234567"
+          pattern="^(0[1246][0-9]-\d{7}|\+58\s?0[1246][0-9]\s?\d{7})$"
+          title="Ej. 0424-1234567 o +58 0424 1234567"
           value={formData.phone}
           onChange={handleChange}
           required
@@ -171,11 +179,27 @@ export function PatientForm({
         <FieldLabel>Dirección</FieldLabel>
         <Input
           name="address"
-          placeholder="Calle Mayor 123, Madrid"
+          placeholder="Av. Bolívar 123, Villa de Cura, Aragua"
           value={formData.address}
           onChange={handleChange}
           required
         />
+      </FieldGroup>
+
+      <FieldGroup>
+        <FieldLabel>Antecedentes Médicos</FieldLabel>
+        <textarea
+          name="medicalHistory"
+          placeholder="Hipertensión, Diabetes tipo 2, Alergias"
+          value={formData.medicalHistory}
+          onChange={handleChange}
+          rows={4}
+          className="w-full px-3 py-2 border border-border rounded-lg bg-white text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+          required
+        />
+        <p className="text-xs text-muted-foreground mt-2">
+          Ingresa antecedentes separados por comas.
+        </p>
       </FieldGroup>
 
       <div className="flex gap-2 pt-4">

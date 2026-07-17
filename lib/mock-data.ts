@@ -74,11 +74,11 @@ export const mockPatients: Patient[] = [
     name: 'Juan García López',
     dni: '12345678A',
     email: 'juan.garcia@email.com',
-    phone: '+34 912 34 56 78',
+    phone: '0244-5123456',
     specialty: 'Cardiología',
     status: 'active',
     dateOfBirth: '1975-03-15',
-    address: 'Calle Mayor 123, Madrid',
+    address: 'Av. Bolívar 123, Villa de Cura, Aragua',
     medicalHistory: ['Hipertensión', 'Diabetes tipo 2']
   },
   {
@@ -86,11 +86,11 @@ export const mockPatients: Patient[] = [
     name: 'María Rodríguez Pérez',
     dni: '87654321B',
     email: 'maria.rodriguez@email.com',
-    phone: '+34 934 56 78 90',
+    phone: '0414-6789012',
     specialty: 'Dermatología',
     status: 'active',
     dateOfBirth: '1982-07-22',
-    address: 'Paseo de Gracia 456, Barcelona',
+    address: 'Calle Carabobo 456, Villa de Cura, Aragua',
     medicalHistory: ['Alergias estacionales']
   },
   {
@@ -98,11 +98,11 @@ export const mockPatients: Patient[] = [
     name: 'Carlos Martínez Díaz',
     dni: '11223344C',
     email: 'carlos.martinez@email.com',
-    phone: '+34 956 12 34 56',
+    phone: '0424-2345678',
     specialty: 'Traumatología',
     status: 'active',
     dateOfBirth: '1988-11-08',
-    address: 'Avenida de la Constitución 789, Sevilla',
+    address: 'Calle Sucre 789, Villa de Cura, Aragua',
     medicalHistory: ['Fractura previa tibia']
   },
   {
@@ -110,11 +110,11 @@ export const mockPatients: Patient[] = [
     name: 'Ana Fernández López',
     dni: '55667788D',
     email: 'ana.fernandez@email.com',
-    phone: '+34 917 89 01 23',
+    phone: '0426-3456789',
     specialty: 'Oftalmología',
     status: 'active',
     dateOfBirth: '1992-05-30',
-    address: 'Calle de Alcalá 321, Madrid',
+    address: 'Urbanización El Molino, Villa de Cura, Aragua',
     medicalHistory: ['Miopía', 'Astigmatismo']
   },
   {
@@ -122,11 +122,11 @@ export const mockPatients: Patient[] = [
     name: 'Roberto Sánchez Torres',
     dni: '99887766E',
     email: 'roberto.sanchez@email.com',
-    phone: '+34 923 45 67 89',
+    phone: '0244-9876543',
     specialty: 'Neurología',
     status: 'active',
     dateOfBirth: '1970-09-14',
-    address: 'Calle Santa Isabel 654, Salamanca',
+    address: 'Conjunto Residencial La Carabobo, Villa de Cura, Aragua',
     medicalHistory: ['Migrañas crónicas']
   },
   {
@@ -134,11 +134,11 @@ export const mockPatients: Patient[] = [
     name: 'Lucia Gómez Ruiz',
     dni: '44332211F',
     email: 'lucia.gomez@email.com',
-    phone: '+34 954 32 10 98',
+    phone: '0424-4567890',
     specialty: 'Cardiología',
     status: 'inactive',
     dateOfBirth: '1965-12-25',
-    address: 'Avenida Blas Infante 987, Sevilla',
+    address: 'Calle Páez 987, Villa de Cura, Aragua',
     medicalHistory: ['Insuficiencia cardíaca']
   },
   {
@@ -146,11 +146,11 @@ export const mockPatients: Patient[] = [
     name: 'Miguel Ángel Blanco',
     dni: '33221144G',
     email: 'miguel.blanco@email.com',
-    phone: '+34 911 22 33 44',
+    phone: '0416-5678901',
     specialty: 'Neumología',
     status: 'active',
     dateOfBirth: '1985-01-17',
-    address: 'Calle Velázquez 147, Madrid',
+    address: 'Sector El Rincón, Villa de Cura, Aragua',
     medicalHistory: ['Asma ocupacional']
   },
   {
@@ -158,11 +158,11 @@ export const mockPatients: Patient[] = [
     name: 'Sofía Jiménez García',
     dni: '66554433H',
     email: 'sofia.jimenez@email.com',
-    phone: '+34 936 77 88 99',
+    phone: '0424-6789012',
     specialty: 'Endocrinología',
     status: 'active',
     dateOfBirth: '1990-04-09',
-    address: 'Paseo de Sant Joan 258, Barcelona',
+    address: 'Calle Miranda 258, Villa de Cura, Aragua',
     medicalHistory: ['Hipotiroidismo', 'Diabetes gestacional anterior']
   },
   {
@@ -170,11 +170,11 @@ export const mockPatients: Patient[] = [
     name: 'David Moreno Estrada',
     dni: '22114455I',
     email: 'david.moreno@email.com',
-    phone: '+34 958 23 45 67',
+    phone: '0244-2345678',
     specialty: 'Gastroenterología',
     status: 'active',
     dateOfBirth: '1978-08-20',
-    address: 'Calle de los Mártires 369, Granada',
+    address: 'Calle Páez 369, Villa de Cura, Aragua',
     medicalHistory: ['GERD', 'Úlcera péptica anterior']
   },
   {
@@ -182,11 +182,11 @@ export const mockPatients: Patient[] = [
     name: 'Patricia López Navarro',
     dni: '77889900J',
     email: 'patricia.lopez@email.com',
-    phone: '+34 971 45 67 89',
+    phone: '0424-3456789',
     specialty: 'Reumatología',
     status: 'active',
     dateOfBirth: '1980-06-12',
-    address: 'Paseo Marítimo 480, Palma',
+    address: 'Urbanización Villa de Cura, Aragua',
     medicalHistory: ['Artritis reumatoide']
   }
 ]

@@ -9,8 +9,11 @@ import {
   Stethoscope,
   Calendar,
   FileText,
-  Pill,  User,
-  Settings,  LogOut,
+  Pill,
+  BookOpen,
+  User,
+  Settings,
+  LogOut,
   Menu,
   X
 } from 'lucide-react'
@@ -24,6 +27,7 @@ const navItems = [
   { href: '/doctors', label: 'Médicos', icon: Stethoscope },
   { href: '/appointments', label: 'Citas', icon: Calendar },
   { href: '/consultations', label: 'Consultas', icon: FileText },
+  { href: '/medical-records', label: 'Historias Clínicas', icon: BookOpen, adminOnly: true },
   { href: '/inventory', label: 'Inventario', icon: Pill },
   { href: '/profile', label: 'Perfil', icon: User },
   { href: '/settings', label: 'Configuración', icon: Settings }
@@ -32,7 +36,7 @@ const navItems = [
 export function Sidebar() {
   const pathname = usePathname()
   const router = useRouter()
-  const { logout } = useAuth()
+  const { logout, currentUser } = useAuth()
   const [isOpen, setIsOpen] = useState(true)
 
   const handleLogout = () => {
@@ -76,25 +80,27 @@ export function Sidebar() {
 
         {/* Navigation */}
         <nav className="p-4 space-y-2 flex-1">
-          {navItems.map((item) => {
-            const Icon = item.icon
-            const isActive = pathname === item.href
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setIsOpen(false)}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                  isActive
-                    ? 'bg-sidebar-primary text-sidebar-primary-foreground font-medium'
-                    : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
-                }`}
-              >
-                <Icon className="w-5 h-5 flex-shrink-0" />
-                <span className="text-sm">{item.label}</span>
-              </Link>
-            )
-          })}
+          {navItems
+            .filter((item) => !item.adminOnly || currentUser?.role === 'admin')
+            .map((item) => {
+              const Icon = item.icon
+              const isActive = pathname === item.href
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setIsOpen(false)}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                    isActive
+                      ? 'bg-sidebar-primary text-sidebar-primary-foreground font-medium'
+                      : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
+                  }`}
+                >
+                  <Icon className="w-5 h-5 flex-shrink-0" />
+                  <span className="text-sm">{item.label}</span>
+                </Link>
+              )
+            })}
         </nav>
 
         {/* Footer */}
